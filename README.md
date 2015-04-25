@@ -4,16 +4,16 @@ These are my personal notes on the CS50 courses and solutions for the problem se
 
 ## LinksCS50 - Computer Science
 
-* (edX)[https://courses.edx.org/dashboard]
-* (2014 program)[http://prog1.mprog.nl/]
-* (CS50 TV)[http://cs50.tv/2014/fall/]
-* (CS50 Net)[http://cs50.net]
-* (Submit projects)[http://apps.cs50.edx.org/]
-* (Test code on the fly C and PHP)[http://run.cs50.net/]
+* [edX](https://courses.edx.org/dashboard)
+* [2014 program](http://prog1.mprog.nl/)
+* [CS50 TV](http://cs50.tv/2014/fall/)
+* [CS50 Net](http://cs50.net)
+* [Submit projects](http://apps.cs50.edx.org/)
+* [Test code on the fly C and PHP](http://run.cs50.net/)
 
 ## SSH Login
 
->ssh jharvard@192.168.79.128
+>ssh jharvard@192.168.79.128<br />
 >crimson
 
 ## pset0
