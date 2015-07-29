@@ -1,4 +1,4 @@
-/**
+/***************************************************************************
  * generate.c
  *
  * Computer Science 50
@@ -10,43 +10,47 @@
  *
  * where n is number of pseudorandom numbers to print
  * and s is an optional seed
- */
-       
+ ***************************************************************************/
+ 
+// standard libraries
+#define _XOPEN_SOURCE
 #include <cs50.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+// constant
 #define LIMIT 65536
 
 int main(int argc, string argv[])
 {
-    // TODO: comment me
+    // make sure the user provides one or two arguments
     if (argc != 2 && argc != 3)
     {
-        printf("Usage: ./generate n [s]\n");
+        printf("Usage: generate n [s]\n");
         return 1;
     }
 
-    // TODO: comment me
+    // cast the n argument to an integer
     int n = atoi(argv[1]);
 
-    // TODO: comment me
+    // if no seed argument is provided use the current timestamp
+    // cast seed argument to long int which is required for the srand48 function
     if (argc == 3)
     {
-        srand((unsigned int) atoi(argv[2]));
+        srand48((long int) atoi(argv[2]));
     }
     else
     {
-        srand((unsigned int) time(NULL));
+        srand48((long int) time(NULL));
     }
 
-    // TODO: comment me
+    // loop for creating and printing n random numbers
     for (int i = 0; i < n; i++)
     {
-        printf("%i\n", rand() % LIMIT);
+        printf("%i\n", (int) (drand48() * LIMIT));
     }
 
-    // that's all folks
+    // success
     return 0;
 }

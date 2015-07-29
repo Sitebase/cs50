@@ -17,14 +17,17 @@
 bool search(int value, int values[], int n)
 {
 
-    // n must be positive
-    if ( n < 0 ) 
-        return false;
-    
-    // search in values
-    for (int i = 0; i < n ; i++)
-        if ( value == values[ i ] )
-            return true;
+    if( n < 0 )
+      return false;
+
+    int i;
+    for( i=0 ; i < n ; i++ ) 
+    {
+      int compare = values[i];
+      printf("value:%d\n", values[i]);
+      if( value == compare )
+        return true;
+    }
 
     return false;
 }
@@ -34,27 +37,15 @@ bool search(int value, int values[], int n)
  */
 void sort(int values[], int n)
 {
-    int skip = 1;
-    for ( int j = 0; j < (n-1) ; j++ )
-    {
-        for ( int i = 0; i < (n-skip) ; i++) 
-        {
-            if ( values[i] > values[i+1] ) {
-                swap(&values[i], &values[i+1]);
-            }
+    int i, j, swap;
+    for(i = 0; i < n; i++) {
+      for(j = 0; j < n - i - 1; j++) {
+        if(values[j] > values[j+1]) {
+          swap = values[j];
+          values[j] = values[j+1];
+          values[j+1] = swap;
         }
-        skip++;
+      }
     }
-
     return;
-}
-
-/**
- * Swap two values
- */
-void swap(int* a, int* b) 
-{
-    int tmp = *a;
-    *a = *b;
-    *b = tmp;
 }
