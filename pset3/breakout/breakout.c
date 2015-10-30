@@ -29,7 +29,7 @@
 #define PADDLE_Y HEIGHT - PADDLE_HEIGHT - 50
 
 // ball velocity
-#define MULTIPLIER(direction) (drand48()/40) * direction
+#define MULTIPLIER(direction) ((drand48()+1)/50) * direction
 
 // number of rows of bricks
 #define ROWS 5
@@ -189,12 +189,13 @@ void initBricks(GWindow window)
 
     double y = BRICKS_START_Y;
     for(int i=0; i <= ROWS; i++) {
+        double x = BRICK_SPACING;
         for(int j=0; j <= COLS; j++) {
-            double x = BRICK_SPACING + ((j+1) * BRICK_SPACING) + (j * brickWidth);
             GRect brick = newGRect(x, y, brickWidth, brickHeight);
             setColor(brick, getRowColor(i));
             setFilled(brick, true);
             add(window, brick);
+            x += BRICK_SPACING + brickWidth;
         }
         y += (BRICK_SPACING * 2) + brickHeight;
     }
