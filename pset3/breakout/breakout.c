@@ -32,7 +32,7 @@
 #define COLS 10
 
 // spacing between bricks
-#define BRICK_SPACING 1
+#define BRICK_SPACING 5
 
 // radius of ball in pixels
 #define RADIUS 10
@@ -110,15 +110,18 @@ int main(void)
 void initBricks(GWindow window)
 {
     double brickWidth = (WIDTH / COLS) - (BRICK_SPACING * 2);
-    double brickHeight = ((HEIGHT / 10) / ROWS) - (BRICK_SPACING * 2);
+    double brickHeight = ((HEIGHT / 7) / ROWS) - (BRICK_SPACING * 2);
 
-    for(int i=0; i < COLS; i++) {
-        double x = BRICK_SPACING + (i * brickWidth);
-        double y = BRICK_SPACING + (i * brickHeight);
-        GRect brick = newGRect(x, y, brickWidth, brickHeight);
-        setColor(brick, "RED");
-        setFilled(brick, true);
-        add(window, brick);
+    double y = 50;
+    for(int i=0; i <= ROWS; i++) {
+        for(int j=0; j <= COLS; j++) {
+            double x = BRICK_SPACING + ((j+1) * BRICK_SPACING) + (j * brickWidth);
+            GRect brick = newGRect(x, y, brickWidth, brickHeight);
+            setColor(brick, "RED");
+            setFilled(brick, true);
+            add(window, brick);
+        }
+        y += (BRICK_SPACING * 2) + brickHeight;
     }
 }
 
