@@ -117,7 +117,28 @@ void initBricks(GWindow window)
         for(int j=0; j <= COLS; j++) {
             double x = BRICK_SPACING + ((j+1) * BRICK_SPACING) + (j * brickWidth);
             GRect brick = newGRect(x, y, brickWidth, brickHeight);
-            setColor(brick, "RED");
+
+            // select color
+            string color = "RED";
+            switch(i) {
+                case 1:
+                    color = "ORANGE";
+                    break;
+                case 2:
+                    color = "YELLOW";
+                    break;
+                case 3:
+                    color = "GREEN";
+                    break;
+                case 4:
+                    color = "BLUE";
+                    break;
+                case 5:
+                    color = "PINK";
+                    break;
+            }
+
+            setColor(brick, color);
             setFilled(brick, true);
             add(window, brick);
         }
