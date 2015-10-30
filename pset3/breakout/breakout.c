@@ -25,6 +25,9 @@
 #define PADDLE_HEIGHT 10
 #define PADDLE_WIDTH 80
 
+// size of the ball
+#define BALL_SIZE 20
+
 // number of rows of bricks
 #define ROWS 5
 
@@ -157,8 +160,14 @@ void initBricks(GWindow window)
  */
 GOval initBall(GWindow window)
 {
-    // TODO
-    return NULL;
+    double x = (WIDTH - BALL_SIZE) / 2;
+    double y = (HEIGHT - BALL_SIZE) / 2;
+    GOval ball = newGOval(x, y, BALL_SIZE, BALL_SIZE);
+    setColor(ball, "BLACK");
+    setFilled(ball, true);
+    add(window, ball);
+
+    return ball;
 }
 
 /**
@@ -169,7 +178,7 @@ GRect initPaddle(GWindow window)
 
     // calculation paddle start position
     double x = (WIDTH - PADDLE_WIDTH) / 2;
-    double y = HEIGHT - PADDLE_HEIGHT - 150;
+    double y = HEIGHT - PADDLE_HEIGHT - 50;
 
     // create the actual paddle
     GRect paddle = newGRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
