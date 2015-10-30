@@ -28,10 +28,8 @@
 #define PADDLE_X (WIDTH - PADDLE_WIDTH) / 2
 #define PADDLE_Y HEIGHT - PADDLE_HEIGHT - 50
 
-// size of the ball
-#define BALL_DX 0.03
-#define BALL_VEL BALL_DX*BALL_DX*2
-#define BALL_DY(dx) (sqrt(BALL_VEL - (dx*dx)))
+// ball velocity
+#define MULTIPLIER(direction) (drand48()/40) * direction
 
 // number of rows of bricks
 #define ROWS 5
@@ -71,10 +69,9 @@ int main(void)
 
     // instantiate ball, centered in middle of window
     GOval ball = initBall(window);
-    double multiplier = drand48()/40;
     int direction = (rand()%2) * 2 - 1;
-    double velocityX = direction * multiplier;
-    double velocityY = .05;
+    double velocityX = MULTIPLIER(direction);
+    double velocityY = .02;
 
     // instantiate paddle, centered at bottom of window
     GRect paddle = initPaddle(window);
@@ -91,11 +88,14 @@ int main(void)
     // number of points initially
     int points = 0;
 
+    // wait to start the game
+    waitForClick();
+
     // keep playing until game over
     while (lives > 0 && bricks > 0)
     {
 
-        // Paddle movement
+        // paddle movement
         GEvent event = getNextEvent(MOUSE_EVENT);
         if (event != NULL && getEventType(event) == MOUSE_MOVED)
         {
@@ -130,6 +130,18 @@ int main(void)
             setLocation(ball, (WIDTH / 2) - RADIUS,(HEIGHT / 2) - RADIUS);
             setLocation(paddle, PADDLE_X, PADDLE_Y);
             waitForClick();
+        }
+
+        // detect collision
+        GObject collisionObject = detectCollision(window, ball);
+        if (collisionObject != NULL && strcmp(getType(collisionObject), "GRect") == 0) {
+            velocityY = -velocityY;
+            if(collisionObject != paddle) {
+                removeGWindow(window, collisionObject);
+                bricks--;
+                points++;
+                updateScoreboard(window, label, points);
+            }
         }
     }
 
@@ -224,8 +236,15 @@ GRect initPaddle(GWindow window)
  */
 GLabel initScoreboard(GWindow window)
 {
-    // TODO
-    return NULL;
+    GLabel label = newGLabel("0");
+    double x = (WIDTH - getWidth(label)) / 2;
+    double y = (HEIGHT - getHeight(label)) / 2;
+    setLocation(label, x, y);
+    setColor(label, "GRAY");
+    setFont(label, "Calibri-40");
+    add(window, label);
+
+    return label;
 }
 
 /**
