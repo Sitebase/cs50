@@ -10,6 +10,7 @@ These are my personal notes on the CS50 courses and solutions for the problem se
 * [CS50 Net](http://cs50.net)
 * [Submit projects](http://apps.cs50.edx.org/)
 * [Test code on the fly C and PHP](http://run.cs50.net/)
+* [Problem sets](http://cs50.edx.org/2015/schedule)
 
 ## SSH Login
 
@@ -21,9 +22,9 @@ These are my personal notes on the CS50 courses and solutions for the problem se
 Binary
 
 ------------------------
-|  1  |  0  |  1  |  1  |  0  | = 22 |
-| --- | --- | --- | --- | --- | --- |
-|  16 |   8 |   4 |   2 |   1 |     |
+| 1  | 0 | 1 | 1 | 0 | = 22 |
+|:---|:--|:--|:--|:--|:-----|
+| 16 | 8 | 4 | 2 | 1 |      |
 
 ## pset1
 
@@ -102,7 +103,7 @@ Also big O is an upper bound on the running time.
 
 An example of a `O(n)` alorithm could be finding a person in a list.
 
-* `O(log n)` refers to an alogrithm like the phone book example were you split the problem in two halfs each time. 
+* `O(log n)` refers to an alogrithm like the phone book example were you split the problem in two halfs each time.
 * `O(1)` doesn't mean the algorithm takes only one step but it means that it's equally fast for small and large problems
 * `Ω(n)` is used to describe the lower bound (best case scenario)
 * `Θ(n)` theta means the lower bound and upper bound are the same for the algorithm
