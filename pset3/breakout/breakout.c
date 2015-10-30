@@ -206,8 +206,8 @@ void initBricks(GWindow window)
  */
 GOval initBall(GWindow window)
 {
-    double x = (WIDTH - DIAMETER) / 2;
-    double y = (HEIGHT - DIAMETER) / 2;
+    double x = (WIDTH / 2) - RADIUS;
+    double y = (HEIGHT / 2) - RADIUS;
     GOval ball = newGOval(x, y, DIAMETER, DIAMETER);
     setColor(ball, "BLACK");
     setFilled(ball, true);
@@ -239,7 +239,7 @@ GLabel initScoreboard(GWindow window)
 {
     GLabel label = newGLabel("0");
     double x = (WIDTH - getWidth(label)) / 2;
-    double y = (HEIGHT - getHeight(label)) / 2;
+    double y = (HEIGHT - getHeight(label)) / 2 - 50;
     setLocation(label, x, y);
     setColor(label, "GRAY");
     setFont(label, "Calibri-40");
