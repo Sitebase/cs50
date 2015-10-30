@@ -124,7 +124,7 @@ int main(void)
             velocityY = -velocityY;
 
         // ball lost
-        else if (ballY + DIAMETER >= HEIGHT)
+        else if (ballY > PADDLE_Y)
         {
             lives--;
             setLocation(ball, (WIDTH / 2) - RADIUS,(HEIGHT / 2) - RADIUS);
