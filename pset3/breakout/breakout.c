@@ -143,6 +143,10 @@ int main(void)
                 updateScoreboard(window, label, points);
             }
         }
+
+        // stop the game if all bricks are gone
+        if(bricks == 0)
+            break;
     }
 
     // wait for click before exiting
