@@ -71,7 +71,7 @@ int main(void)
 
     // instantiate ball, centered in middle of window
     GOval ball = initBall(window);
-    double multiplier = drand48()/20;
+    double multiplier = drand48()/40;
     int direction = (rand()%2) * 2 - 1;
     double velocityX = direction * multiplier;
     double velocityY = .05;
