@@ -6,7 +6,7 @@
  *
  * Helper functions for Problem Set 3.
  */
-       
+
 #include <cs50.h>
 #include <stdio.h>
 #include "helpers.h"
@@ -21,10 +21,10 @@ bool search(int value, int values[], int n)
       return false;
 
     int i;
-    for( i=0 ; i < n ; i++ ) 
+    for( i=0 ; i < n ; i++ )
     {
       int compare = values[i];
-      printf("value:%d\n", values[i]);
+      // printf("value:%d\n", values[i]);
       if( value == compare )
         return true;
     }
