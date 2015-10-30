@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 // Stanford Portable Library
 #include <spl/gevents.h>
@@ -24,9 +25,13 @@
 // paddle dimensions
 #define PADDLE_HEIGHT 10
 #define PADDLE_WIDTH 80
+#define PADDLE_X (WIDTH - PADDLE_WIDTH) / 2
+#define PADDLE_Y HEIGHT - PADDLE_HEIGHT - 50
 
 // size of the ball
-#define BALL_SIZE 20
+#define BALL_DX 0.03
+#define BALL_VEL BALL_DX*BALL_DX*2
+#define BALL_DY(dx) (sqrt(BALL_VEL - (dx*dx)))
 
 // number of rows of bricks
 #define ROWS 5
@@ -35,11 +40,12 @@
 #define COLS 10
 
 // spacing between bricks
-#define BRICK_SPACING 5
+#define BRICK_SPACING 4
 #define BRICKS_START_Y 50
 
 // radius of ball in pixels
 #define RADIUS 10
+#define DIAMETER RADIUS * 2
 
 // lives
 #define LIVES 3
@@ -65,6 +71,10 @@ int main(void)
 
     // instantiate ball, centered in middle of window
     GOval ball = initBall(window);
+    double multiplier = drand48()/20;
+    int direction = (rand()%2) * 2 - 1;
+    double velocityX = direction * multiplier;
+    double velocityY = .05;
 
     // instantiate paddle, centered at bottom of window
     GRect paddle = initPaddle(window);
@@ -84,8 +94,9 @@ int main(void)
     // keep playing until game over
     while (lives > 0 && bricks > 0)
     {
-        GEvent event = getNextEvent(MOUSE_EVENT);
 
+        // Paddle movement
+        GEvent event = getNextEvent(MOUSE_EVENT);
         if (event != NULL && getEventType(event) == MOUSE_MOVED)
         {
             // ensure circle follows top cursor
@@ -97,6 +108,28 @@ int main(void)
             if(x >= 0 && x <= WIDTH - PADDLE_WIDTH) {
                 setLocation(paddle, x, paddleY);
             }
+        }
+
+        // ball bounce
+        move(ball,velocityX,velocityY);
+        double ballX = getX(ball);
+        double ballY = getY(ball);
+
+        // left or right bounce
+        if ((ballX + DIAMETER >= WIDTH) || ballX <= 0)
+            velocityX = -velocityX;
+
+        // top bounce
+        else if (ballY <= 0)
+            velocityY = -velocityY;
+
+        // ball lost
+        else if (ballY + DIAMETER >= HEIGHT)
+        {
+            lives--;
+            setLocation(ball, (WIDTH / 2) - RADIUS,(HEIGHT / 2) - RADIUS);
+            setLocation(paddle, PADDLE_X, PADDLE_Y);
+            waitForClick();
         }
     }
 
@@ -160,9 +193,9 @@ void initBricks(GWindow window)
  */
 GOval initBall(GWindow window)
 {
-    double x = (WIDTH - BALL_SIZE) / 2;
-    double y = (HEIGHT - BALL_SIZE) / 2;
-    GOval ball = newGOval(x, y, BALL_SIZE, BALL_SIZE);
+    double x = (WIDTH - DIAMETER) / 2;
+    double y = (HEIGHT - DIAMETER) / 2;
+    GOval ball = newGOval(x, y, DIAMETER, DIAMETER);
     setColor(ball, "BLACK");
     setFilled(ball, true);
     add(window, ball);
@@ -175,13 +208,8 @@ GOval initBall(GWindow window)
  */
 GRect initPaddle(GWindow window)
 {
-
-    // calculation paddle start position
-    double x = (WIDTH - PADDLE_WIDTH) / 2;
-    double y = HEIGHT - PADDLE_HEIGHT - 50;
-
     // create the actual paddle
-    GRect paddle = newGRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+    GRect paddle = newGRect(PADDLE_X, PADDLE_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
     setColor(paddle, "BLACK");
     setFilled(paddle, true);
 
