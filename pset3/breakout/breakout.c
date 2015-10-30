@@ -33,6 +33,7 @@
 
 // spacing between bricks
 #define BRICK_SPACING 5
+#define BRICKS_START_Y 50
 
 // radius of ball in pixels
 #define RADIUS 10
@@ -105,6 +106,32 @@ int main(void)
 }
 
 /**
+ * Get row color based on a row number
+ */
+string getRowColor(int row)
+{
+    string color = "RED";
+    switch(row) {
+        case 1:
+            color = "ORANGE";
+            break;
+        case 2:
+            color = "YELLOW";
+            break;
+        case 3:
+            color = "GREEN";
+            break;
+        case 4:
+            color = "BLUE";
+            break;
+        case 5:
+            color = "PINK";
+            break;
+    }
+    return color;
+}
+
+/**
  * Initializes window with a grid of bricks.
  */
 void initBricks(GWindow window)
@@ -112,33 +139,12 @@ void initBricks(GWindow window)
     double brickWidth = (WIDTH / COLS) - (BRICK_SPACING * 2);
     double brickHeight = ((HEIGHT / 7) / ROWS) - (BRICK_SPACING * 2);
 
-    double y = 50;
+    double y = BRICKS_START_Y;
     for(int i=0; i <= ROWS; i++) {
         for(int j=0; j <= COLS; j++) {
             double x = BRICK_SPACING + ((j+1) * BRICK_SPACING) + (j * brickWidth);
             GRect brick = newGRect(x, y, brickWidth, brickHeight);
-
-            // select color
-            string color = "RED";
-            switch(i) {
-                case 1:
-                    color = "ORANGE";
-                    break;
-                case 2:
-                    color = "YELLOW";
-                    break;
-                case 3:
-                    color = "GREEN";
-                    break;
-                case 4:
-                    color = "BLUE";
-                    break;
-                case 5:
-                    color = "PINK";
-                    break;
-            }
-
-            setColor(brick, color);
+            setColor(brick, getRowColor(i));
             setFilled(brick, true);
             add(window, brick);
         }
