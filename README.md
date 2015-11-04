@@ -118,3 +118,7 @@ An example of a `O(n)` alorithm could be finding a person in a list.
 
 * gdb: GNU Debugger for stepping line by line through a program
 * With `echo $?` you can check the return code of an executed cli program
+
+## week 4
+
+* `string` is just a synonym for `char*` which represents the address of the first character of the string. That why we can't compare two string like this `if(string == string)` because under the hood we will actually compare two address. Use `strcmp`. More info see `man strcmp`
