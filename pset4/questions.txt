@@ -1,9 +1,33 @@
-0.  TODO
-1.  TODO
-2.  TODO
-3.  TODO
-4.  TODO
-5.  TODO
+0.  How many different colors does each format support?
+
+The below numbers are of course depending on the number of bits per pixel that is used.
+
+* BMP: 16M
+* PNG: 256
+* JPEG: 16M
+* GIF: 256
+
+1.  Which of the formats supports animation?
+
+GIF
+
+2.  What’s the difference between lossy and lossless compression?
+
+With lossless compression the file is made smaller without affecting the quality.
+Lossy compression will lose some of the data/quality in favor of creating a smaller file.
+
+3.  Which of these formats is lossy-compressed?
+
+JPEG
+
+4.  What happens, technically speaking, when a file is deleted on a FAT file system?
+
+Only the pointer too that file will be removed. The actual file is left untouched.
+
+5.  What can someone like you do to ensure (with high probability) that files you delete cannot be recovered?
+
+Overwrite the actual file on disk with some garbage values.
+
 6.  TODO
 7.  TODO
 8.  TODO
