@@ -28,16 +28,60 @@ Only the pointer too that file will be removed. The actual file is left untouche
 
 Overwrite the actual file on disk with some garbage values.
 
-6.  TODO
-7.  TODO
-8.  TODO
-9.  TODO
-10. TODO
-11. TODO
-12. TODO
-13. TODO
-14. TODO
-15. TODO
-16. TODO
-17. TODO
-18. TODO
+6.  What’s stdint.h?
+
+Is the file that contains the definitions for some integer types that we'll use in the copy program.
+
+7.  What’s the point of using uint8_t, uint32_t, int32_t, and uint16_t in a program?
+
+Different parts of a file take up different amounts of sizes.
+
+8.  How many bytes is a BYTE, a DWORD, a LONG, and a WORD, respectively? (Assume a 32-bit architecture like the CS50 Appliance.)
+
+BYTE = 1 byte
+DWORD = 4 bytes
+LONG = 4 byte
+WORD = 2 byte
+
+9.  What (in ASCII, decimal, or hexadecimal) must the first two bytes of any BMP file be? (Leading bytes used to identify file formats (with high probability) are generally called "magic numbers.)"
+
+0x4d42
+
+10. What’s the difference between bfSize and biSize?
+
+bfSize: this is the size of the complete image file
+biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)
+
+biSize: this is the size of the image part without the headers
+(biWidth * sizeof(RGBTRIPLE) + padding) * abs(biHeight)
+
+11. What does it mean if biHeight is negative?
+
+This means it's a top-down device-independent BMP
+
+12. What field in BITMAPINFOHEADER specifies the BMP’s color depth (i.e., bits per pixel)?
+
+biBitCount
+
+13. Why might fopen return NULL in copy.c:37?
+
+If the file could not be created.
+
+14. Why is the third argument to fread always 1 in our code?
+
+Because we always read one element; struct in this case.
+
+15. What value does copy.c:70 assign padding if bi.biWidth is 3?
+
+3
+
+16. What does fseek do?
+
+It move the cursor to a specific location in the file.
+
+17. What is SEEK_CUR?
+
+Is an integer constant that we can use in combination with fseek to do a relative seek
+based on the current position of the cursor.
+
+18. whodunit.c
