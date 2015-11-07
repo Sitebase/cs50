@@ -11,6 +11,7 @@
 #include <string.h>
 
 #define SOURCE "card.raw"
+#define BLOCK_SIZE 512
 
 int main(int argc, char* argv[])
 {
@@ -25,9 +26,9 @@ int main(int argc, char* argv[])
     }
 
     // buffer to hold the current readed block
-    uint8_t block[512];
+    uint8_t block[BLOCK_SIZE];
 
-    // JPEG markers
+    // JPEG magic numbers
     uint8_t mark1[4] = {0xff, 0xd8, 0xff, 0xe0};
     uint8_t mark2[4] = {0xff, 0xd8, 0xff, 0xe1};
 
@@ -35,7 +36,7 @@ int main(int argc, char* argv[])
     FILE* fw = NULL;
     int counter = 0;
 
-    while (fread(block, 512, 1, fp))
+    while (fread(block, BLOCK_SIZE, 1, fp))
     {
 
         // check if the magic numbers do match a JPEG
@@ -46,18 +47,18 @@ int main(int argc, char* argv[])
                 fclose(fw);
 
             // generate filename
-            char filename[8];
-            sprintf(filename, "%03d.jpg", counter);
+            char destinantion[8];
+            sprintf(destinantion, "%03d.jpg", counter);
 
             // open file to store the jpeg in
-            fw = fopen(filename, "w");
+            fw = fopen(destinantion, "w");
 
             // increase the jpeg filename counter
             counter++;
         }
 
         if (fw != NULL)
-            fwrite(block, 512, 1, fw);
+            fwrite(block, BLOCK_SIZE, 1, fw);
     }
 
     if (fw != NULL)
