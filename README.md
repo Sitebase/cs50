@@ -122,3 +122,15 @@ An example of a `O(n)` alorithm could be finding a person in a list.
 ## week 4
 
 * `string` is just a synonym for `char*` which represents the address of the first character of the string. That why we can't compare two string like this `if(string == string)` because under the hood we will actually compare two address. Use `strcmp`. More info see `man strcmp`
+* `GetString` returns `NULL` is something goes wrong like for example the string was too long ...
+* `malloc` will return `NULL` when the system is out of memory. That's the same reason `GetString` can return `NULL`. So always do a senaty check for this.
+* When using `maloc` always add 1 to the size which is needed for the null character `\0`
+
+## week 5
+
+* `char* bla` initialize a char pointer
+* `*a` follow the pointer address and get value
+* `sscanf` parse input or another variable e.g. char to integer
+* valgrind will find memory problems
+* `(*ptr).n` is the same as `ptr->n`
+* stack is memory that we temporarily need and that can be freed again after for example the current function is done. The heap is memory that we for example need for some global variables.
