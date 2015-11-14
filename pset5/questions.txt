@@ -1,10 +1,32 @@
-0.  TODO
-1.  TODO
-2.  TODO
-3.  TODO
-4.  TODO
-5.  TODO
-6.  TODO
+0.  What is pneumonoultramicroscopicsilicovolcanoconiosis?
+
+This is the longest word that is in the large dictionary (45 characters).
+
+1.  According to its man page, what does getrusage do?
+
+I can be used to get information about resource utilization of the current process.
+
+2.  Per that same man page, how many members are in a variable of type struct rusage?
+
+16
+
+3.  Why do you think we pass before and after by reference (instead of by value) to calculate, even though we’re not changing their contents?
+
+This way the function knows where in memory it needs to write the data so we can access it later on with that pointer.
+
+4.  Explain as precisely as possible, in a paragraph or more, how main goes about reading words from a file. In other words, convince us that you indeed understand how that function’s for loop works.
+
+Depending on the number of arguments we now the position of the text to validate is in position 2 or 1.
+Now that we know which file we want to check at line 60 we open the file for reading (r) and store the pointer in a variable.
+At 61 we do a sanity check to make sure the file could be opened.
+Before we start our loop we need to create a few variables. One for keeping track of the index for keeping track of the index were we should put the leter.
+Another variable is `word` which will function as a buffer to read the words letter per letter from the file. We give this variable a fixed size of the maximum word length in the dictionary +1 for the termination character (\0).
+
+Now we start our loop and read the first character of the file.
+If the character is a letter we add it to our buffer (word) and now the while lop...
+
+5.  Why do you think we used fgetc to read each word’s characters one at a time rather than use fscanf with a format string like "%s" to read whole words at a time? Put another way, what problems might arise by relying on fscanf alone?
+6.  Why do you think we declared the parameters for check and load as const?
 7.  TODO
 8.  TODO
 9.  TODO
