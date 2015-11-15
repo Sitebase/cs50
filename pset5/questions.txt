@@ -19,15 +19,33 @@ This way the function knows where in memory it needs to write the data so we can
 Depending on the number of arguments we now the position of the text to validate is in position 2 or 1.
 Now that we know which file we want to check at line 60 we open the file for reading (r) and store the pointer in a variable.
 At 61 we do a sanity check to make sure the file could be opened.
-Before we start our loop we need to create a few variables. One for keeping track of the index for keeping track of the index were we should put the leter.
+Before we start our loop we need to create a few variables. One for keeping track of the index were we should put the leter.
 Another variable is `word` which will function as a buffer to read the words letter per letter from the file. We give this variable a fixed size of the maximum word length in the dictionary +1 for the termination character (\0).
 
 Now we start our loop and read the first character of the file.
-If the character is a letter we add it to our buffer (word) and now the while lop...
+If the character is a letter or "'" we add it to our buffer (word) and now the while loop will continue reading the following characters of the word.
 
 5.  Why do you think we used fgetc to read each word’s characters one at a time rather than use fscanf with a format string like "%s" to read whole words at a time? Put another way, what problems might arise by relying on fscanf alone?
+
+There would not be an easy way to ignore invalid words otherwise.
+
 6.  Why do you think we declared the parameters for check and load as const?
-7.  TODO
-8.  TODO
-9.  TODO
-10. TODO
+
+To prevent the check and load functions from modifying these values.
+
+7.  What data structure(s) did you use to implement your spell-checker? Be sure not to leave your answer at just "hash table," "trie," or the like. Expound on what’s inside each of your "nodes."
+
+I've went with a trie structure. Each node contains an array that represents the alphabet were each index can point to the next trie node. Each node also contains a bool that can be used that the path to the current
+node forms a full word.
+
+8.  How slow was your code the first time you got it working correctly?
+
+Speed wasn't a problem. I got some difficulties with the indexes of the accent characters which were negative resulting in segmentation faults from the moment I started testing with the large dictionary.
+
+9.  What kinds of changes, if any, did you make to your code in order to improve its performance?
+
+I was using multiple loops which wasn't needed so I've refactored the code so that check and load only use one loop.
+
+10. Do you feel that your code has any bottlenecks that you were not able to chip away at?
+
+I think the code is working well
