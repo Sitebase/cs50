@@ -38,7 +38,12 @@ bool check(const char* word)
             break;
 
         // calculate trie node index for the current letter
-        int index = letter - 'a';
+        int index;
+        if(isalpha(letter)) {
+            index = letter - 'a';
+        } else {
+            index = 26;
+        }
 
         // check if letter is in node
         if(current->children[index] == NULL)
@@ -59,7 +64,6 @@ bool check(const char* word)
  */
 bool load(const char* dictionary)
 {
-    printf("dic is: %s", dictionary);
 
     // open dictonary file to read
     FILE* fp = fopen(dictionary, "r");
