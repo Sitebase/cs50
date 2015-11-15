@@ -123,15 +123,33 @@ bool load(const char* dictionary)
 
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    return totalWords;
 }
+
+/**
+ * Recursive clean up the trie nodes
+ */
+void freeNode(node* current)
+{
+    for(int i=0; i < 27; i++) {
+        if(current->children[i] != NULL)
+            freeNode(current->children[i]);
+    }
+    free(current);
+}
+
 
 /**
  * Unloads dictionary from memory.  Returns true if successful else false.
  */
 bool unload(void)
 {
-    // TODO
-    return false;
+
+    // clean up all trie nodes
+    freeNode(root);
+
+    // reset total number of words
+    totalWords = 0;
+
+    return true;
 }
