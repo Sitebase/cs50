@@ -103,10 +103,16 @@ bool load(const char* dictionary)
         
         // insert letter in the trie if needed
         else {
-            printf("letter: %c\n", character);
 
             // calculate the index of the character in the trie (a=0, b=1, ...)
-            int index = character - 'a';
+            int index;
+            if(isalpha(character)) {
+                index = tolower(character) - 'a';
+            } else {
+                // z=25 do we give non alpha number an index that follows after 25
+                // because there is only one special character we can safely give it a fixed index
+                index = 26;
+            }
 
             // insert the letter in the trie if not available yet
             if(current->children[index] == NULL)
@@ -117,7 +123,7 @@ bool load(const char* dictionary)
         }
     }
 
-    printf("total words: %i\n", totalWords);
+    fclose(fp);
     return true;
 }
 
