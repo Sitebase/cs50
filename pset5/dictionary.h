@@ -19,7 +19,7 @@
 /**
  * trie node struct
  */
-struct node
+typedef struct node
 {
     // mark this path as a word
     bool is_word;
@@ -38,8 +38,6 @@ bool check(const char* word);
  * Loads dictionary into memory.  Returns true if successful else false.
  */
 bool load(const char* dictionary);
-
-bool insertWord(char* word);
 
 /**
  * Returns number of words in dictionary if loaded else 0 if not yet loaded.

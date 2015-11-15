@@ -16,6 +16,7 @@
 #include <stdio.h>
 
 node* root;
+int totalWords = 0;
 
 /**
  * Returns true if word is in dictionary else false.
@@ -40,26 +41,56 @@ bool load(const char* dictionary)
         return false;
     }
 
+    // allocate memory for the root node
+    root = calloc(27, sizeof(node));
+
     // create variable that can be used to temp store the read character
     char character;
-    char word[LENGTH];
 
-    // loop over dictionary file
-    do {
-        character = fscanf(fp, "%s", word);
-        printf("word: %s\n", word);
+    // set the current cursor to point to the root node
+    node* current = root;
 
-        // insert word in trie
+    // loop character per character over the complete input file
+    while((character = fgetc(fp)) != EOF)
+    {
+
+        // if new line is detect we now that a word has ended
+        // so time to mark the current position in the trie as a complete word
+        // and reset the pointer
+        if(character == '\n') 
+        {
+
+            if(!current->is_word) 
+            {
+                // mark current as a word
+                current->is_word = true;
+
+                // increment word count
+                totalWords++;
+            }
+
+            // resset cursor
+            current = root;
+
+        } 
         
+        // insert letter in the trie if needed
+        else {
+            printf("letter: %c\n", character);
 
+            // calculate the index of the character in the trie (a=0, b=1, ...)
+            int index = character - 'a';
 
-    } while(character != EOF);
-    
-    return false;
-}
+            // insert the letter in the trie if not available yet
+            if(current->children[index] == NULL)
+                current->children[index] = calloc(27, sizeof(node));
 
-bool insertWord(char* word)
-{
+            // move the trie cursor to the next node
+            current = current->children[index];
+        }
+    }
+
+    printf("total words: %i\n", totalWords);
     return true;
 }
 
@@ -74,6 +105,7 @@ int getIndex(char c)
 /**
  * Returns number of words in dictionary if loaded else 0 if not yet loaded.
  */
+
 unsigned int size(void)
 {
     // TODO
