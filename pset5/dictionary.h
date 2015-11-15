@@ -17,6 +17,19 @@
 #define LENGTH 45
 
 /**
+ * trie node struct
+ */
+struct node
+{
+    // mark this path as a word
+    bool is_word;
+    
+    // pointer to other nodes
+    struct node* children[27];
+}
+node;
+
+/**
  * Returns true if word is in dictionary else false.
  */
 bool check(const char* word);
@@ -25,6 +38,8 @@ bool check(const char* word);
  * Loads dictionary into memory.  Returns true if successful else false.
  */
 bool load(const char* dictionary);
+
+bool insertWord(char* word);
 
 /**
  * Returns number of words in dictionary if loaded else 0 if not yet loaded.

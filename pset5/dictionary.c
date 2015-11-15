@@ -8,8 +8,14 @@
  ***************************************************************************/
 
 #include <stdbool.h>
-
+#include <stdlib.h>
+#include <ctype.h>
 #include "dictionary.h"
+
+// remove after debugging is done
+#include <stdio.h>
+
+node* root;
 
 /**
  * Returns true if word is in dictionary else false.
@@ -25,8 +31,44 @@ bool check(const char* word)
  */
 bool load(const char* dictionary)
 {
-    // TODO
+    printf("dic is: %s", dictionary);
+
+    // open dictonary file to read
+    FILE* fp = fopen(dictionary, "r");
+    if(fp == NULL){
+        printf("Could not open file %s\n", dictionary);
+        return false;
+    }
+
+    // create variable that can be used to temp store the read character
+    char character;
+    char word[LENGTH];
+
+    // loop over dictionary file
+    do {
+        character = fscanf(fp, "%s", word);
+        printf("word: %s\n", word);
+
+        // insert word in trie
+        
+
+
+    } while(character != EOF);
+    
     return false;
+}
+
+bool insertWord(char* word)
+{
+    return true;
+}
+
+/**
+ * calculation character index 
+ */
+int getIndex(char c)
+{
+    return tolower(c) - 'a';
 }
 
 /**
