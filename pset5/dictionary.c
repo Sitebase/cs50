@@ -10,12 +10,16 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "dictionary.h"
-
-// remove after debugging is done
 #include <stdio.h>
 
+#include "dictionary.h"
+
+#define NUM_NODES 27
+
+// root node of the trie
 node* root;
+
+// number of words in the current trie
 int totalWords = 0;
 
 /**
@@ -65,7 +69,7 @@ bool load(const char* dictionary)
     }
 
     // allocate memory for the root node
-    root = calloc(27, sizeof(node));
+    root = calloc(NUM_NODES, sizeof(node));
 
     // create variable that can be used to temp store the read character
     char character;
@@ -106,7 +110,7 @@ bool load(const char* dictionary)
 
             // insert the letter in the trie if not available yet
             if(current->children[index] == NULL)
-                current->children[index] = calloc(27, sizeof(node));
+                current->children[index] = calloc(NUM_NODES, sizeof(node));
 
             // move the trie cursor to the next node
             current = current->children[index];
@@ -131,7 +135,7 @@ unsigned int size(void)
  */
 void freeNode(node* current)
 {
-    for(int i=0; i < 27; i++) {
+    for(int i=0; i < NUM_NODES; i++) {
         if(current->children[i] != NULL)
             freeNode(current->children[i]);
     }
