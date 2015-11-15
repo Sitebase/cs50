@@ -23,7 +23,30 @@ int totalWords = 0;
  */
 bool check(const char* word)
 {
-    // TODO
+    node* current = root;
+
+    for(int i=0; i < LENGTH; i++) {
+
+        char letter = tolower(word[i]);
+
+        // if end of word break loop
+        if(letter == '\0')
+            break;
+
+        // calculate trie node index for the current letter
+        int index = letter - 'a';
+
+        // check if letter is in node
+        if(current->children[index] == NULL)
+            return false;
+        else 
+            current = current->children[index];
+       
+    }
+
+    if(current->is_word)
+        return true;
+
     return false;
 }
 
@@ -92,14 +115,6 @@ bool load(const char* dictionary)
 
     printf("total words: %i\n", totalWords);
     return true;
-}
-
-/**
- * calculation character index 
- */
-int getIndex(char c)
-{
-    return tolower(c) - 'a';
 }
 
 /**
