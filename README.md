@@ -134,3 +134,13 @@ An example of a `O(n)` alorithm could be finding a person in a list.
 * valgrind will find memory problems
 * `(*ptr).n` is the same as `ptr->n`
 * stack is memory that we temporarily need and that can be freed again after for example the current function is done. The heap is memory that we for example need for some global variables.
+
+## pset 6
+
+* the starting code doesn't support signaling correct so to kill it find the PID to kill it:
+
+```
+sudo netstat -lpn |grep :8080
+```
+
+*
