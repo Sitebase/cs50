@@ -19,6 +19,11 @@
 // number of octets for buffered reads
 #define OCTETS 512
 
+// request line tokens
+#define METHOD          0
+#define REQUEST_TARGET  1
+#define HTTP_VERSION    2
+
 // header files
 #include <arpa/inet.h>
 #include <errno.h>
@@ -37,6 +42,7 @@ typedef char octet;
 
 // prototypes
 bool connected(void);
+int isValidRequestLine(char* requestLine[3]);
 bool error(unsigned short code);
 void handler(int signal);
 ssize_t load(void);
@@ -63,7 +69,7 @@ octet* body = NULL;
 
 int main(int argc, char* argv[])
 {
-    // a global variable defined in errno.h that's "set by system 
+    // a global variable defined in errno.h that's "set by system
     // calls and some library functions [to a nonzero value]
     // in the event of an error to indicate what went wrong"
     errno = 0;
@@ -137,7 +143,7 @@ int main(int argc, char* argv[])
             {
                 error(414);
                 continue;
-            }   
+            }
             char line[needle - haystack + 2 + 1];
             strncpy(line, haystack, needle - haystack + 2);
             line[needle - haystack + 2] = '\0';
@@ -145,20 +151,87 @@ int main(int argc, char* argv[])
             // log request-line
             printf("%s", line);
 
-            // TODO: validate request-line
 
-            // TODO: extract query from request-target
-            char query[] = "TODO";
+            // validate request-line
+            // make copy of line wihout CRLF so we can use it in
+            // strtok because this will modify the variable
+            char lineTokens[needle - haystack + 1];
+            strncpy(lineTokens, haystack, needle - haystack);
+            lineTokens[needle - haystack] = '\0';
 
-            // TODO: concatenate root and absolute-path
-            char path[] = "TODO";
+            // extract the tokens (method, request-target, http-version)
+            // from the request-line
+            char* requestLine[3] = { NULL, NULL, NULL };
+            requestLine[METHOD] = strtok(lineTokens, " ");
+            int i = 0;
+            while (requestLine[i] != NULL && i < 2)
+            {
+                i++;
+                requestLine[i] = strtok(NULL, " ");
+            }
 
-            // TODO: ensure path exists
-            
-            // TODO: ensure path is readable
- 
-            // TODO: extract path's extension
-            char extension[] = "TODO";
+            // validate method token
+            int status = isValidRequestLine(requestLine);
+            if(status != 0) {
+                error(status);
+                continue;
+            }
+
+            // get start position of the query string
+            char* queryInd = strchrnul(requestLine[REQUEST_TARGET], '?');
+
+            // extract the query string if one is available
+            char* eosInd = strchr(requestLine[REQUEST_TARGET], '\0');
+            char query[(eosInd - queryInd < 1) ? 1 : eosInd - queryInd];
+            if(strncmp(queryInd, "\0", 1) != 0)
+            {
+                memcpy(
+                    query,
+                    queryInd + 1,
+                    (eosInd - queryInd < 1) ? 1 : eosInd - queryInd
+                );
+            }
+
+            // get the absolute-path
+            queryInd = strchrnul(requestLine[REQUEST_TARGET], '?');
+            int absolutePathSize = queryInd - requestLine[REQUEST_TARGET];
+            char absolutePath[absolutePathSize + 1]; // extra space is needed for null termination
+            strncpy(absolutePath, requestLine[REQUEST_TARGET], absolutePathSize);
+            absolutePath[absolutePathSize] = '\0';
+
+            // make sure extension is available
+            char* extInd = strchr(absolutePath, '.');
+            if (extInd == NULL)
+            {
+                // not implemented
+                error(501);
+                continue;
+            }
+
+            // extract path's extension
+            eosInd = strchr(absolutePath, '\0');
+            int extSize = eosInd - extInd;
+            char extension[extSize];
+            memcpy(extension, extInd + 1, extSize); // +1 to strip the point of the extension
+
+            // concatenate root and absolute-path
+            char path[strlen(root) + strlen(absolutePath) + 1];
+            strcpy(path, root);
+            strcat(path, absolutePath);
+
+            // ensure path exists
+            if (access(path, F_OK) == -1)
+            {
+                error(404);
+                continue;
+            }
+
+            // ensure path is readable
+            if (access(path, R_OK) == -1)
+            {
+                error(403);
+                continue;
+            }
 
             // dynamic content
             if (strcasecmp("php", extension) == 0)
@@ -238,15 +311,64 @@ int main(int argc, char* argv[])
                     continue;
                 }
 
-                // TODO: respond to client
+                // respond to client
+                if (dprintf(cfd, "HTTP/1.1 200 OK\r\n") < 0)
+                {
+                    continue;
+                }
+                if (dprintf(cfd, "Connection: close\r\n") < 0)
+                {
+                    continue;
+                }
+                if (dprintf(cfd, "Content-Length: %i\r\n", length) < 0)
+                {
+                    continue;
+                }
+                if (dprintf(cfd, "Content-Type: %s\r\n\r\n", type) < 0)
+                {
+                    continue;
+                }
+                if (write(cfd, body, length) == -1)
+                {
+                    continue;
+                }
             }
-            
+
             // announce OK
             printf("\033[32m");
             printf("HTTP/1.1 200 OK");
             printf("\033[39m\n");
         }
     }
+}
+
+/**
+ * Validate request line and if the request line is not conform the rfc7230
+ * return the approriate HTTP error status code
+ * @see http://tools.ietf.org/html/rfc7230
+ */
+int isValidRequestLine(char* requestLine[3])
+{
+    if (requestLine[METHOD] == NULL || strcmp("GET", requestLine[METHOD]) != 0)
+        return 405;
+
+    // validate request-target token
+    if (requestLine[REQUEST_TARGET] == NULL)
+        return 400;
+
+    // ensure request-target begins with a "/"
+    else if (requestLine[REQUEST_TARGET][0] != '/')
+        return 501;
+
+    // ensure request-target is devoid of double-quotes
+    else if (strchr(requestLine[REQUEST_TARGET], '\"') != NULL)
+        return 400;
+
+    // validate http-version token
+    if (requestLine[HTTP_VERSION] == NULL || strcmp("HTTP/1.1", requestLine[HTTP_VERSION]) != 0)
+        return 505;
+
+    return 0;
 }
 
 /**
@@ -306,7 +428,7 @@ bool error(unsigned short code)
 
     // template
     char* template = "<html><head><title>%i %s</title></head><body><h1>%i %s</h1></body></html>";
-    char content[strlen(template) + 2 * ((int) log10(code) + 1 - 2) + 2 * (strlen(phrase) - 2) + 1];
+    char content[strlen(template) + (2 * ((int) log10(code) + 1 - 2)) + (2 * (strlen(phrase) - 2)) + 1];
     int length = sprintf(content, template, code, phrase, code, phrase);
 
     // respond with Status-Line
@@ -439,7 +561,30 @@ void handler(int signal)
  */
 const char* lookup(const char* extension)
 {
-    // TODO
+    if (extension != NULL)
+    {
+        if (strcasecmp("css", extension) == 0)
+            return "text/css";
+
+        if (strcasecmp("html", extension) == 0)
+            return "text/html";
+
+        if (strcasecmp("gif", extension) == 0)
+            return "image/gif";
+
+        if (strcasecmp("ico", extension) == 0)
+            return "image/x-icon";
+
+        if (strcasecmp("jpg", extension) == 0)
+            return "image/jpeg";
+
+        if (strcasecmp("js", extension) == 0)
+            return "text/javascript";
+
+        if (strcasecmp("png", extension) == 0)
+            return "image/png";
+    }
+
     return NULL;
 }
 
