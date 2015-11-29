@@ -143,4 +143,4 @@ An example of a `O(n)` alorithm could be finding a person in a list.
 sudo netstat -lpn |grep :8080
 ```
 
-*
+* `char bla[50]` will be stored in the stack. `malloc` will on the other hand use the heap which you are responsible for to free if you no longer need it.
