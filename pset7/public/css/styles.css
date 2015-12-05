@@ -32,3 +32,15 @@
     /* surround with whitespace */
     margin: 20px;
 }
+
+td {
+    text-align: left;
+}
+
+#navigation {
+    text-align: center;
+}
+
+#navigation .nav {
+    display: inline-block;
+}
